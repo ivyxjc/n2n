@@ -106,16 +106,20 @@ void traceEvent(int eventTraceLevel, char* file, int line, char * format, ...) {
      */
 
     memset(buf, 0, sizeof(buf));
-    strftime(theDate, N2N_TRACE_DATESIZE, "%d/%b/%Y %H:%M:%S", localtime(&theTime));
+    strftime(theDate, N2N_TRACE_DATESIZE, "%Y-%m-%dT%H:%M:%S%z", localtime(&theTime));
 
     va_start(va_ap, format);
     vsnprintf(buf, sizeof(buf)-1, format, va_ap);
     va_end(va_ap);
 
     if(eventTraceLevel == 0 /* TRACE_ERROR */)
-      extra_msg = "ERROR: ";
+      extra_msg = "ERROR";
     else if(eventTraceLevel == 1 /* TRACE_WARNING */)
-      extra_msg = "WARNING: ";
+      extra_msg = "WARNING";
+    else if(eventTraceLevel == 2 /* TRACE_NORMAL */)
+      extra_msg = "INFO";
+    else if(eventTraceLevel == 3 /* TRACE_INFO */)
+      extra_msg = "INFO";
 
     while(buf[strlen(buf)-1] == '\n') buf[strlen(buf)-1] = '\0';
 
@@ -125,11 +129,10 @@ void traceEvent(int eventTraceLevel, char* file, int line, char * format, ...) {
         openlog("n2n", LOG_PID, LOG_DAEMON);
         syslog_opened = 1;
       }
-
       snprintf(out_buf, sizeof(out_buf), "%s%s", extra_msg, buf);
       syslog(LOG_INFO, "%s", out_buf);
     } else {
-      snprintf(out_buf, sizeof(out_buf), "%s [%s:%d] %s%s", theDate, file, line, extra_msg, buf);
+      snprintf(out_buf, sizeof(out_buf), "%s[%s]%s", extra_msg,theDate, buf);
 #ifdef __ANDROID_NDK__
         switch (eventTraceLevel) {
             case 0:         // ERROR
