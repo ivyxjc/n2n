@@ -106,7 +106,7 @@ void traceEvent(int eventTraceLevel, char* file, int line, char * format, ...) {
      */
 
     memset(buf, 0, sizeof(buf));
-    strftime(theDate, N2N_TRACE_DATESIZE, "%Y-%m-%dT%H:%M:%S%z", localtime(&theTime));
+    strftime(theDate, N2N_TRACE_DATESIZE, "%Y-%m-%dT%H:%M:%S", localtime(&theTime));
 
     va_start(va_ap, format);
     vsnprintf(buf, sizeof(buf)-1, format, va_ap);
@@ -132,7 +132,7 @@ void traceEvent(int eventTraceLevel, char* file, int line, char * format, ...) {
       snprintf(out_buf, sizeof(out_buf), "%s%s", extra_msg, buf);
       syslog(LOG_INFO, "%s", out_buf);
     } else {
-      snprintf(out_buf, sizeof(out_buf), "%s[%s]%s", extra_msg,theDate, buf);
+      snprintf(out_buf, sizeof(out_buf), "%s[%s] %s", extra_msg,theDate, buf);
 #ifdef __ANDROID_NDK__
         switch (eventTraceLevel) {
             case 0:         // ERROR
