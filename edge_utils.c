@@ -666,6 +666,7 @@ static void check_join_multicast_group(n2n_edge_t *eee) {
       traceEvent(TRACE_ERROR, "WSAGetLastError(): %u", WSAGetLastError());
 #endif
     } else {
+      traceEvent(TRACE_NORMAL, "Successfully connected");
 //      traceEvent(TRACE_NORMAL, "Successfully joined multicast group %s:%u",
 //        N2N_MULTICAST_GROUP, N2N_MULTICAST_PORT);
       eee->multicast_joined = 1;
