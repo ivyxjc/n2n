@@ -225,8 +225,8 @@ n2n_edge_t* edge_init(const tuntap_dev *dev, const n2n_edge_conf_t *conf, int *r
   }
 #endif
 
-  for(i=0; i<conf->sn_num; ++i)
-    traceEvent(TRACE_NORMAL, "supernode %u => %s\n", i, (conf->sn_ip_array[i]));
+//  for(i=0; i<conf->sn_num; ++i)
+//    traceEvent(TRACE_NORMAL, "supernode %u => %s\n", i, (conf->sn_ip_array[i]));
 
   /* Set the active supernode */
   supernode2addr(&(eee->supernode), conf->sn_ip_array[eee->sn_idx]);
@@ -666,8 +666,8 @@ static void check_join_multicast_group(n2n_edge_t *eee) {
       traceEvent(TRACE_ERROR, "WSAGetLastError(): %u", WSAGetLastError());
 #endif
     } else {
-      traceEvent(TRACE_NORMAL, "Successfully joined multicast group %s:%u",
-        N2N_MULTICAST_GROUP, N2N_MULTICAST_PORT);
+//      traceEvent(TRACE_NORMAL, "Successfully joined multicast group %s:%u",
+//        N2N_MULTICAST_GROUP, N2N_MULTICAST_PORT);
       eee->multicast_joined = 1;
     }
   }
@@ -848,7 +848,7 @@ static void update_supernode_reg(n2n_edge_t * eee, time_t nowTime) {
       eee->sn_idx=0;
     }
 
-    traceEvent(TRACE_WARNING, "Supernode not responding, now trying %s", supernode_ip(eee));
+    traceEvent(TRACE_WARNING, "Supernode not responding, now trying...");
 
     eee->sup_attempts = N2N_EDGE_SUP_ATTEMPTS;
   }
@@ -858,9 +858,8 @@ static void update_supernode_reg(n2n_edge_t * eee, time_t nowTime) {
   for(sn_idx=0; sn_idx<eee->conf.sn_num; sn_idx++) {
     supernode2addr(&(eee->supernode), eee->conf.sn_ip_array[sn_idx]);
 
-    traceEvent(TRACE_INFO, "Registering with supernode [id: %u/%u][%s][attempts left %u]",
-	       sn_idx+1, eee->conf.sn_num,
-	       supernode_ip(eee), (unsigned int)eee->sup_attempts);
+    traceEvent(TRACE_INFO, "Registering with supernode [id: %u/%u][attempts left %u]",
+	       sn_idx+1, eee->conf.sn_num, (unsigned int)eee->sup_attempts);
 
     send_register_super(eee, &(eee->supernode));
   }
@@ -1940,7 +1939,7 @@ int edge_conf_add_supernode(n2n_edge_conf_t *conf, const char *ip_and_port) {
     return(-1);
 
   strncpy((conf->sn_ip_array[conf->sn_num]), ip_and_port, N2N_EDGE_SN_HOST_SIZE);
-  traceEvent(TRACE_NORMAL, "Adding supernode[%u] = %s", (unsigned int)conf->sn_num, (conf->sn_ip_array[conf->sn_num]));
+//  traceEvent(TRACE_NORMAL, "Adding supernode[%u] = %s", (unsigned int)conf->sn_num, (conf->sn_ip_array[conf->sn_num]));
   conf->sn_num++;
 
   return(0);
